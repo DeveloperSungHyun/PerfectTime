@@ -28,5 +28,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(fragmentPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        //===
     }
 }
