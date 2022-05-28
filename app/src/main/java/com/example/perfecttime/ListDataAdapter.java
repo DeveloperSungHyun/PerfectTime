@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
@@ -27,6 +28,8 @@ import com.example.perfecttime.RoomDataBase.DateDataBase.DateDayDataBase;
 import com.example.perfecttime.RoomDataBase.WeekDataBase.WeekDataBase;
 import com.example.perfecttime.RoomDataBase.WeekDataBase.WeekDay;
 import com.example.perfecttime.RoomDataBase.WeekDataBase.WeekDayDao;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +103,8 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.Custom
         holder.Name.setText(listItemDara.get(position).getName());
         holder.Memo.setText(listItemDara.get(position).getMemo());
         holder.Time.setText(Time_Str);
+
+        holder.TextView_Day.setText(listItemDara.get(position).getDay());
 
         if(listItemDara.get(position).isAmPm()) //true = 오전 | false = 오후
             holder.AmPm.setText("오전");
@@ -251,6 +256,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.Custom
         TextView Time;
         TextView AmPm;
         ImageView important;
+        TextView TextView_Day;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -262,6 +268,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.Custom
             Time = itemView.findViewById(R.id.TextView_Time);
             AmPm = itemView.findViewById(R.id.TextView_Time_AmPm);
             important = itemView.findViewById(R.id.ImageView_important);
+            TextView_Day = itemView.findViewById(R.id.TextView_Day);
         }
     }
 

@@ -3,18 +3,28 @@ package com.example.perfecttime;
 public class ListItemDara {
     private String Name;
     private String Memo;
+    private String Day;
     private int Time_h;
     private int Time_m;
     private boolean AmPm;
     private boolean important;
 
-    public ListItemDara(String name, String memo, int time_h, int time_m, boolean amPm, boolean important) {
+    public ListItemDara(String name, String memo, int time_h, int time_m, boolean amPm, boolean important, String day) {
         Name = name;
         Memo = memo;
         Time_h = time_h;
         Time_m = time_m;
         AmPm = amPm;
         this.important = important;
+        Day = day;
+    }
+
+    public String getDay() {
+        return Day;
+    }
+
+    public void setDay(String day) {
+        Day = day;
     }
 
     public String getName() {
