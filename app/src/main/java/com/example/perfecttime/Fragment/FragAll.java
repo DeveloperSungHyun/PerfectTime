@@ -74,7 +74,7 @@ public class FragAll extends Fragment {
                 AmPm = false;
             }
 
-            ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, "매일");
+            ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, "매일", 0);
             arrayList.add(dara);
 
         }

@@ -1,8 +1,10 @@
 package com.example.perfecttime;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
@@ -29,12 +30,10 @@ import com.example.perfecttime.RoomDataBase.WeekDataBase.WeekDataBase;
 import com.example.perfecttime.RoomDataBase.WeekDataBase.WeekDay;
 import com.example.perfecttime.RoomDataBase.WeekDataBase.WeekDayDao;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.CustomViewHolder> {
+public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     View view;
 
@@ -60,13 +59,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.Custom
         this.listItemDara = listItemDara;
     }
 
-    @NonNull
-    @Override
-    public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_list_item_1, parent, false);
-        CustomViewHolder holder = new CustomViewHolder(view);
-
+    void DataBase_setting(){
         AllDayDataBase allDayDataBase = Room.databaseBuilder(view.getContext(), AllDayDataBase.class, "AllDay_DB")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
@@ -87,17 +80,48 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.Custom
                 .build();
 
         dateDayDao = dateDayDataBase.dateDayDao();
-
-        return holder;
     }
 
+    @NonNull
     @Override
-    public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {//리스트 시간순 배열은 여기서
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        Context context = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        if(viewType == ViewType.MAIN_View){
+//            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_list_item_1, parent, false);
+            view = inflater.inflate(R.layout.recyclerview_list_item_1, parent, false);
+            DataBase_setting();
+            return new CustomViewHolder(view);
+        }else {
+            view = inflater.inflate(R.layout.recyclerview_list_item_2, parent, false);
+            //DataBase_setting();
+            return new CustomViewHolder_label(view);
+        }
+
+    }
+
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {//리스트 시간순 배열은 여기서
 
         fragAll = new FragAll();
         fragWeek = new FragWeek();
         fragDate = new FragDate();
 
+        if(holder instanceof CustomViewHolder){
+//            ((CustomViewHolder) holder).
+            ListItemView(((CustomViewHolder) holder), position);
+        }else{
+            ((CustomViewHolder_label) holder).TextView_Day.setText("일");
+        }
+
+
+
+    }
+
+    void ListItemView(CustomViewHolder holder, int position){
         String Time_Str;
         Time_Str = listItemDara.get(position).getTime_h() + " : " + listItemDara.get(position).getTime_m();
         holder.Name.setText(listItemDara.get(position).getName());
@@ -158,13 +182,23 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.Custom
             @Override
             public boolean onLongClick(View view) {
                 ItemPosition = holder.getAdapterPosition();
-                remove(ItemPosition);
+
+                listItemDara.get(ItemPosition).getDay();
+                //listItemDara.get(ItemPosition).getDay()
+                int Week_count = 1;
+                String test_ser = listItemDara.get(0).getDay();
+                for(int i = 0; i < ItemPosition; i++){
+                    if(!test_ser.equals(listItemDara.get(i).getDay())){
+                        test_ser = listItemDara.get(i).getDay();
+                        Week_count++;
+                    }
+                }
+                Log.d("====================", Integer.toString(Week_count));
+                remove(ItemPosition, Week_count);
 
                 return true;
             }
         });
-
-
     }
 
     @Override
@@ -172,7 +206,12 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.Custom
         return (null != listItemDara ? listItemDara.size() : 0);
     }
 
-    public void remove(int position){
+    @Override
+    public int getItemViewType(int position) {
+        return listItemDara.get(position).getViewtype();
+    }
+
+    public void remove(int position, int Week_count){
         try {
 
             int ViewPageNumber = MainActivity.viewPager.getCurrentItem();
@@ -211,7 +250,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.Custom
 
                                 WeekDay weekDay = new WeekDay();
 
-                                weekDay.setId(WeekDayList.get(position).getId());
+                                weekDay.setId(WeekDayList.get(position - Week_count).getId());
                                 weekDayDao.setDelete(weekDay);
 
                             }
@@ -269,6 +308,16 @@ public class ListDataAdapter extends RecyclerView.Adapter<ListDataAdapter.Custom
             AmPm = itemView.findViewById(R.id.TextView_Time_AmPm);
             important = itemView.findViewById(R.id.ImageView_important);
             TextView_Day = itemView.findViewById(R.id.TextView_Day);
+        }
+    }
+
+    public class CustomViewHolder_label extends RecyclerView.ViewHolder {
+        TextView TextView_Day;
+        public CustomViewHolder_label(View itemView){
+            super(itemView);
+
+            TextView_Day = itemView.findViewById(R.id.TextView_Day);
+
         }
     }
 

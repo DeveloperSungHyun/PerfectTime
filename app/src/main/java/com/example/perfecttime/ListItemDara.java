@@ -9,7 +9,9 @@ public class ListItemDara {
     private boolean AmPm;
     private boolean important;
 
-    public ListItemDara(String name, String memo, int time_h, int time_m, boolean amPm, boolean important, String day) {
+    private int viewtype;
+
+    public ListItemDara(String name, String memo, int time_h, int time_m, boolean amPm, boolean important, String day, int viewtype) {
         Name = name;
         Memo = memo;
         Time_h = time_h;
@@ -17,6 +19,16 @@ public class ListItemDara {
         AmPm = amPm;
         this.important = important;
         Day = day;
+
+        this.viewtype = viewtype;
+    }
+
+    public int getViewtype() {
+        return viewtype;
+    }
+
+    public void setViewtype(int viewtype) {
+        this.viewtype = viewtype;
     }
 
     public String getDay() {

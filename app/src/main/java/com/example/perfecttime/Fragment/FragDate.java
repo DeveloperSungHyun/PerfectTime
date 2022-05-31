@@ -120,7 +120,7 @@ public class FragDate extends Fragment {
                     AmPm = false;
                 }
 
-                ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, "1월 1일");
+                ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, "1월 1일", 1);
                 arrayList.add(dara);
             }
 

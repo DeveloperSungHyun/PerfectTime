@@ -84,7 +84,7 @@ public class FragWeek extends Fragment {
         arrayList.clear();
         dayList = weekDayDao.getWeekDay();
         String WeekDay[] = {"일","월", "화", "수", "목", "금", "토"};
-        for(int i = 1; i < dayList.size(); i++){
+        for(int i = 0; i < dayList.size(); i++){
 
             if(dayList.get(i).getWeek() == WeekButton.day || true){
 
@@ -100,7 +100,11 @@ public class FragWeek extends Fragment {
                 }
 
 
-                ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, WeekDay[dayList.get(i).getWeek()] + "요일");
+                if(i == 0 || dayList.get(i).getWeek() != dayList.get(i - 1).getWeek()){
+                    ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, WeekDay[dayList.get(i).getWeek()] + "요일", 1);
+                    arrayList.add(dara);
+                }
+                ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, WeekDay[dayList.get(i).getWeek()] + "요일", 0);
                 arrayList.add(dara);
 
             }
