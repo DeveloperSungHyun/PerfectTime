@@ -250,7 +250,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                                 WeekDay weekDay = new WeekDay();
 
-                                weekDay.setId(WeekDayList.get(position - Week_count).getId());
+                                weekDay.setId(WeekDayList.get(position - Week_count).getId());//
                                 weekDayDao.setDelete(weekDay);
 
                             }
