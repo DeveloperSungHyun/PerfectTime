@@ -101,6 +101,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return new CustomViewHolder_label(view);
         }
 
+
     }
 
 
@@ -115,17 +116,44 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            ((CustomViewHolder) holder).
             ListItemView(((CustomViewHolder) holder), position);
         }else{
-            ((CustomViewHolder_label) holder).TextView_Day.setText(listItemDara.get(position).getDay());
-            if(listItemDara.get(position).getDay().equals("토요일")){
-                ((CustomViewHolder_label) holder).TextView_Day.setTextColor(0xB30000FF);
-            }else if(listItemDara.get(position).getDay().equals("일요일")){
-                ((CustomViewHolder_label) holder).TextView_Day.setTextColor(0xB3FF0000);
+            divisionLine( ((CustomViewHolder_label) holder), position);
+        }
+        //RelativeLayout_divisionLine
 
-            }
+
+    }
+
+    void divisionLine(CustomViewHolder_label holder, int position){
+        holder.TextView_Day.setText(listItemDara.get(position).getDay());
+        if(listItemDara.get(position).getDay().equals("토요일")){
+            holder.TextView_Day.setTextColor(0xB30000FF);
+        }else if(listItemDara.get(position).getDay().equals("일요일")){
+            holder.TextView_Day.setTextColor(0xB3FF0000);
+        }else{
+            holder.TextView_Day.setTextColor(0xFF000000);
         }
 
+        holder.RelativeLayout_divisionLine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ScheduleAdd.class);
 
+                intent.putExtra("FragScene", "FragWeek");//Week
 
+                int Int_Day = 0;
+                switch (listItemDara.get(position).getDay()){
+                    case "일요일": Int_Day = 0;break;
+                    case "월요일": Int_Day = 1;break;
+                    case "화요일": Int_Day = 2;break;
+                    case "수요일": Int_Day = 3;break;
+                    case "목요일": Int_Day = 4;break;
+                    case "금요일": Int_Day = 5;break;
+                    case "토요일": Int_Day = 6;break;
+                }
+                intent.putExtra("Week", Int_Day);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
     void ListItemView(CustomViewHolder holder, int position){
@@ -237,6 +265,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return true;
             }
         });
+
     }
 
     int WeekDay_count(int ItemPosition){
@@ -366,10 +395,13 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public class CustomViewHolder_label extends RecyclerView.ViewHolder {
         TextView TextView_Day;
+        RelativeLayout RelativeLayout_divisionLine;
         public CustomViewHolder_label(View itemView){
             super(itemView);
 
+            RelativeLayout_divisionLine = itemView.findViewById(R.id.RelativeLayout_divisionLine);
             TextView_Day = itemView.findViewById(R.id.TextView_Day);
+
 
         }
     }

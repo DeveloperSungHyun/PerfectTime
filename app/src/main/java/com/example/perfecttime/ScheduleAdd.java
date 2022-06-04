@@ -34,13 +34,15 @@ import java.util.Calendar;
 
 public class ScheduleAdd extends Activity {
 
+    Intent getIntentData;
+    Calendar calendar;
+
     AllDay allDay;
+    WeekDay weekDay;
 
     AllDayDao allDayDao;
     WeekDayDao weekDayDao;
     DateDayDao dateDayDao;
-
-    Intent getIntentData;
 
     TextView TextView_Date;
     TextView TextView_Time_H, TextView_Time_M, TextView_AmPm;
@@ -58,18 +60,7 @@ public class ScheduleAdd extends Activity {
 
     int UpDateNum = 0;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        setContentView(R.layout.schedule_add);
-
+    void id_settings(){
         TextView_Time_H = findViewById(R.id.TextView_Time_H);
         TextView_Time_M = findViewById(R.id.TextView_Time_M);
         TextView_AmPm = findViewById(R.id.TextView_AmPm);
@@ -87,118 +78,29 @@ public class ScheduleAdd extends Activity {
         Switch_Important = findViewById(R.id.Switch_Important);
 
         Spinner_WeekDay = findViewById(R.id.Spinner_WeekDay);
+    }
 
-        getIntentData = getIntent();
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        setContentView(R.layout.schedule_add);
 
+        id_settings();
 
-        if(getIntentData.getStringExtra("FragScene").equals("FragDate")){
-            INT_Year = getIntentData.getIntExtra("Date_y", 0);
-            INT_Month = getIntentData.getIntExtra("Date_m", 0);
-            INT_Date = getIntentData.getIntExtra("Date_d", 0);
-        }
+        getIntentData = getIntent();//getData Intent
 
-        if(getIntentData.getStringExtra("FragScene").equals("FragAll_UpDate") ||
-                getIntentData.getStringExtra("FragScene").equals("FragAll")){
-            TextView_Date.setVisibility(View.VISIBLE);
-            Spinner_WeekDay.setVisibility(View.GONE);
-            TextView_Date.setText(getIntentData.getStringExtra("Day"));
-        }
-        if(getIntentData.getStringExtra("FragScene").equals("FragWeek_UpDate") ||
-                getIntentData.getStringExtra("FragScene").equals("FragWeek")){
-            TextView_Date.setVisibility(View.GONE);
-            Spinner_WeekDay.setVisibility(View.VISIBLE);
-            Week = getIntentData.getIntExtra("Week", 0);
-        }
-
-/*
-        if(getIntentData.getStringExtra("FragScene").equals("FragAll_UpDate")){
-
-
-        }else if(getIntentData.getStringExtra("FragScene").equals("FragAll_UpDate")){
-
-        }*/
-
-        UpDateNum = getIntentData.getIntExtra("DateNumBer", 0);
-
-        Name = getIntentData.getStringExtra("Name");
-        Memo = getIntentData.getStringExtra("Memo");
-
-        Time_h = getIntentData.getIntExtra("Time_h", 0);
-        Time_m = getIntentData.getIntExtra("Time_m", 0);
-
-        sound = getIntentData.getBooleanExtra("sound", false);
-        vibration = getIntentData.getBooleanExtra("vibration", false);
-        notification = getIntentData.getBooleanExtra("notification", false);
-
-        beforehand = getIntentData.getBooleanExtra("beforehand", false);
-        HolidayOff = getIntentData.getBooleanExtra("HolidayOff", false);
-        Important = getIntentData.getBooleanExtra("Important", false);
-
-        EditText_Name.setText(Name);
-        EditText_Memo.setText(Memo);
-
-        TextView_Time_H.setText(Integer.toString(Time_h));
-        TextView_Time_M.setText(Integer.toString(Time_m));
-
-        if(Time_h < 12){
-            TextView_AmPm.setText("오전");
-            if(Time_h == 0)
-                TextView_Time_H.setText("12");
-            else
-                TextView_Time_H.setText(Integer.toString(Time_h));
-        }else{
-            TextView_AmPm.setText("오후");
-            if(Time_h == 24)
-                TextView_Time_H.setText("12");
-            else
-                TextView_Time_H.setText(Integer.toString(Time_h - 12));
-        }
-
-        TextView_Time_M.setText(Integer.toString(Time_m));
-
-
-        //    Switch Switch_sound, Switch_vibration, Switch_notification;
-        //    Switch Switch_beforehand, Switch_HolidayOff, Switch_Important;
-        Switch_sound.setChecked(sound);
-        Switch_vibration.setChecked(vibration);
-        Switch_notification.setChecked(notification);
-
-        Switch_beforehand.setChecked(beforehand);
-        Switch_HolidayOff.setChecked(HolidayOff);
-        Switch_Important.setChecked(Important);
+        getData_start_setting();
 
 
 
-        Calendar calendar = Calendar.getInstance();
-        if(Time_h == 0 && Time_m == 0){
-            Time_h = calendar.get(Calendar.HOUR_OF_DAY);
-            Time_m = calendar.get(Calendar.MINUTE);
-            TextView_Time_H.setText(Integer.toString(calendar.get(Calendar.HOUR)));
-            TextView_Time_M.setText(Integer.toString(Time_m));
-        }
-
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.WeekDay, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
-
-        adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
-
-        Spinner_WeekDay.setAdapter(adapter);
-
-        Spinner_WeekDay.setSelection(Week);
-        Spinner_WeekDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Week = i;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-
+        //시간설정
         findViewById(R.id.LinearLayout_TimeText).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -271,6 +173,117 @@ public class ScheduleAdd extends Activity {
 
     }
 
+    void getData_start_setting(){
+
+        String exit_SceneGetData = getIntentData.getStringExtra("FragScene");
+        //날짜 타입의 알람
+        if(exit_SceneGetData.equals("FragDate")){
+            INT_Year = getIntentData.getIntExtra("Date_y", 0);
+            INT_Month = getIntentData.getIntExtra("Date_m", 0);
+            INT_Date = getIntentData.getIntExtra("Date_d", 0);
+        }
+
+        if(exit_SceneGetData.equals("FragAll_UpDate") ||
+                exit_SceneGetData.equals("FragAll")){
+            TextView_Date.setVisibility(View.VISIBLE);
+            Spinner_WeekDay.setVisibility(View.GONE);
+            TextView_Date.setText(getIntentData.getStringExtra("Day"));
+        }
+        if(exit_SceneGetData.equals("FragWeek_UpDate") ||
+                exit_SceneGetData.equals("FragWeek")){
+            TextView_Date.setVisibility(View.GONE);
+            Spinner_WeekDay.setVisibility(View.VISIBLE);
+            Week = getIntentData.getIntExtra("Week", 0);
+
+            //
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.WeekDay, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+
+            Spinner_WeekDay.setAdapter(adapter);
+            Spinner_WeekDay.setSelection(Week);
+            Spinner_WeekDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    Week = i;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
+
+        if(  exit_SceneGetData.equals("FragAll") ||
+                exit_SceneGetData.equals("FragWeek") ||
+                exit_SceneGetData.equals("FragDate")){
+
+            calendar = Calendar.getInstance();
+
+            Time_h = calendar.get(Calendar.HOUR_OF_DAY);
+            Time_m = calendar.get(Calendar.MINUTE);
+            TextView_Time_H.setText(Integer.toString(calendar.get(Calendar.HOUR)));
+            TextView_Time_M.setText(Integer.toString(Time_m));
+        }
+
+/*
+        if(getIntentData.getStringExtra("FragScene").equals("FragAll_UpDate")){
+
+
+        }else if(getIntentData.getStringExtra("FragScene").equals("FragAll_UpDate")){
+
+        }*/
+
+        UpDateNum = getIntentData.getIntExtra("DateNumBer", 0);
+
+        Name = getIntentData.getStringExtra("Name");
+        Memo = getIntentData.getStringExtra("Memo");
+
+        Time_h = getIntentData.getIntExtra("Time_h", 0);
+        Time_m = getIntentData.getIntExtra("Time_m", 0);
+
+        sound = getIntentData.getBooleanExtra("sound", false);
+        vibration = getIntentData.getBooleanExtra("vibration", false);
+        notification = getIntentData.getBooleanExtra("notification", false);
+
+        beforehand = getIntentData.getBooleanExtra("beforehand", false);
+        HolidayOff = getIntentData.getBooleanExtra("HolidayOff", false);
+        Important = getIntentData.getBooleanExtra("Important", false);
+
+        EditText_Name.setText(Name);
+        EditText_Memo.setText(Memo);
+
+        TextView_Time_H.setText(Integer.toString(Time_h));
+        TextView_Time_M.setText(Integer.toString(Time_m));
+
+        if(Time_h < 12){
+            TextView_AmPm.setText("오전");
+            if(Time_h == 0)
+                TextView_Time_H.setText("12");
+            else
+                TextView_Time_H.setText(Integer.toString(Time_h));
+        }else{
+            TextView_AmPm.setText("오후");
+            if(Time_h == 24)
+                TextView_Time_H.setText("12");
+            else
+                TextView_Time_H.setText(Integer.toString(Time_h - 12));
+        }
+
+        TextView_Time_M.setText(Integer.toString(Time_m));
+
+
+        //    Switch Switch_sound, Switch_vibration, Switch_notification;
+        //    Switch Switch_beforehand, Switch_HolidayOff, Switch_Important;
+        Switch_sound.setChecked(sound);
+        Switch_vibration.setChecked(vibration);
+        Switch_notification.setChecked(notification);
+
+        Switch_beforehand.setChecked(beforehand);
+        Switch_HolidayOff.setChecked(HolidayOff);
+        Switch_Important.setChecked(Important);
+    }
+
     void AllDate(String DateSet){
         AllDayDataBase allDayDataBase = Room.databaseBuilder(getApplicationContext(), AllDayDataBase.class, "AllDay_DB")
                 .fallbackToDestructiveMigration()
@@ -316,7 +329,7 @@ public class ScheduleAdd extends Activity {
 
         weekDayDao = weekDataBase.weekDayDao();
 
-        WeekDay weekDay = new WeekDay();
+        weekDay = new WeekDay();
 
         weekDay.setWeek(Week);
 
