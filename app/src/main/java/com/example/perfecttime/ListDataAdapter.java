@@ -151,6 +151,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     case "토요일": Int_Day = 6;break;
                 }
                 intent.putExtra("Week", Int_Day);
+
                 view.getContext().startActivity(intent);
             }
         });
