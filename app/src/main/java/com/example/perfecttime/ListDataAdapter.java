@@ -35,6 +35,7 @@ import java.util.List;
 
 public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    Intent intent;
     View view;
 
     AllDayDao allDayDao;
@@ -114,7 +115,13 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            ((CustomViewHolder) holder).
             ListItemView(((CustomViewHolder) holder), position);
         }else{
-            ((CustomViewHolder_label) holder).TextView_Day.setText("일");
+            ((CustomViewHolder_label) holder).TextView_Day.setText(listItemDara.get(position).getDay());
+            if(listItemDara.get(position).getDay().equals("토요일")){
+                ((CustomViewHolder_label) holder).TextView_Day.setTextColor(0xB30000FF);
+            }else if(listItemDara.get(position).getDay().equals("일요일")){
+                ((CustomViewHolder_label) holder).TextView_Day.setTextColor(0xB3FF0000);
+
+            }
         }
 
 
@@ -145,32 +152,70 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.RelativeLayout_BackGround.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //int i = MainActivity.viewPager.getCurrentItem();
                 int i = MainActivity.viewPager.getCurrentItem();
-
                 ItemPosition = holder.getAdapterPosition();
-                AllDayList = allDayDao.getAllDay();
-                Toast.makeText(view.getContext(), "test" + ItemPosition, Toast.LENGTH_SHORT).show();
+                switch (i){
+
+                    case 1:{
+
+                        AllDayList = allDayDao.getAllDay();
+                        Toast.makeText(view.getContext(), "test" + ItemPosition, Toast.LENGTH_SHORT).show();
 
 //                fragAll.TimeDateReSet(view.getContext());
-                Intent intent = new Intent(view.getContext(), ScheduleAdd.class);
-                intent.putExtra("FragScene", "FragAll_UpDate");
-                intent.putExtra("Day", "매일");
+                        intent = new Intent(view.getContext(), ScheduleAdd.class);
+                        intent.putExtra("FragScene", "FragAll_UpDate");
+                        intent.putExtra("Day", "매일");
 
-                intent.putExtra("DateNumBer", AllDayList.get(ItemPosition).getId());
+                        intent.putExtra("DateNumBer", AllDayList.get(ItemPosition).getId());
 
-                intent.putExtra("Name", allDayDao.getAllDay().get(ItemPosition).getName());
-                intent.putExtra("Memo", allDayDao.getAllDay().get(ItemPosition).getMemo());
-                intent.putExtra("Time_h", allDayDao.getAllDay().get(ItemPosition).getTime_h());
-                intent.putExtra("Time_m", allDayDao.getAllDay().get(ItemPosition).getTime_m());
-                intent.putExtra("Important", allDayDao.getAllDay().get(ItemPosition).isImportant());
+                        intent.putExtra("Name", allDayDao.getAllDay().get(ItemPosition).getName());
+                        intent.putExtra("Memo", allDayDao.getAllDay().get(ItemPosition).getMemo());
+                        intent.putExtra("Time_h", allDayDao.getAllDay().get(ItemPosition).getTime_h());
+                        intent.putExtra("Time_m", allDayDao.getAllDay().get(ItemPosition).getTime_m());
+                        intent.putExtra("Important", allDayDao.getAllDay().get(ItemPosition).isImportant());
 
-                intent.putExtra("Sound", allDayDao.getAllDay().get(ItemPosition).isSound());
-                intent.putExtra("Vibration", allDayDao.getAllDay().get(ItemPosition).isVibration());
-                intent.putExtra("Notification", allDayDao.getAllDay().get(ItemPosition).isNotification());
+                        intent.putExtra("Sound", allDayDao.getAllDay().get(ItemPosition).isSound());
+                        intent.putExtra("Vibration", allDayDao.getAllDay().get(ItemPosition).isVibration());
+                        intent.putExtra("Notification", allDayDao.getAllDay().get(ItemPosition).isNotification());
 
-                intent.putExtra("AutoOff_Time", allDayDao.getAllDay().get(ItemPosition).getAutoOff_Time());
-                intent.putExtra("Warning", allDayDao.getAllDay().get(ItemPosition).isWarning());
-                intent.putExtra("Holiday", allDayDao.getAllDay().get(ItemPosition).isHoliday());
+                        intent.putExtra("AutoOff_Time", allDayDao.getAllDay().get(ItemPosition).getAutoOff_Time());
+                        intent.putExtra("Warning", allDayDao.getAllDay().get(ItemPosition).isWarning());
+                        intent.putExtra("Holiday", allDayDao.getAllDay().get(ItemPosition).isHoliday());
+
+                        break;
+                    }
+
+                    case 2:{
+
+                        WeekDayList = weekDayDao.getWeekDay();
+                        Toast.makeText(view.getContext(), "test" + ItemPosition, Toast.LENGTH_SHORT).show();
+
+//                fragAll.TimeDateReSet(view.getContext());
+                        intent = new Intent(view.getContext(), ScheduleAdd.class);
+                        intent.putExtra("FragScene", "FragWeek_UpDate");
+
+                        int Week_count = WeekDay_count(ItemPosition);
+                        intent.putExtra("DateNumBer", WeekDayList.get(ItemPosition - Week_count).getId());
+
+                        intent.putExtra("Week", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getWeek());
+
+                        intent.putExtra("Name", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getName());
+                        intent.putExtra("Memo", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getMemo());
+                        intent.putExtra("Time_h", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getTime_h());
+                        intent.putExtra("Time_m", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getTime_m());
+                        intent.putExtra("Important", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isImportant());
+
+                        intent.putExtra("Sound", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isSound());
+                        intent.putExtra("Vibration", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isVibration());
+                        intent.putExtra("Notification", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isNotification());
+
+                        intent.putExtra("AutoOff_Time", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getAutoOff_Time());
+                        intent.putExtra("Warning", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isWarning());
+                        intent.putExtra("Holiday", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isHoliday());
+                        break;
+                    }
+                }
 
                 view.getContext().startActivity(intent);
 //                fragAll.startActivity(intent);
@@ -183,22 +228,30 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public boolean onLongClick(View view) {
                 ItemPosition = holder.getAdapterPosition();
 
-                listItemDara.get(ItemPosition).getDay();
-                //listItemDara.get(ItemPosition).getDay()
-                int Week_count = 1;
-                String test_ser = listItemDara.get(0).getDay();
-                for(int i = 0; i < ItemPosition; i++){
-                    if(!test_ser.equals(listItemDara.get(i).getDay())){
-                        test_ser = listItemDara.get(i).getDay();
-                        Week_count++;
-                    }
-                }
+                int Week_count = WeekDay_count(ItemPosition);
                 Log.d("====================", Integer.toString(Week_count));
+
                 remove(ItemPosition, Week_count);
+
 
                 return true;
             }
         });
+    }
+
+    int WeekDay_count(int ItemPosition){
+        listItemDara.get(ItemPosition).getDay();
+        //listItemDara.get(ItemPosition).getDay()
+        int Week_count = 1;
+        String test_ser = listItemDara.get(0).getDay();
+        for(int i = 0; i < ItemPosition; i++){
+            if(!test_ser.equals(listItemDara.get(i).getDay())){
+                test_ser = listItemDara.get(i).getDay();
+                Week_count++;
+            }
+        }
+
+        return Week_count;
     }
 
     @Override

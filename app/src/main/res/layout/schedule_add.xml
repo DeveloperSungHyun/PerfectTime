@@ -70,14 +70,24 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/TextView_Date"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="월요일"
-                    android:textColor="#FF000000"
-                    android:textSize="20dp" />
+                    android:layout_gravity="right">
+                    <TextView
+                        android:id="@+id/TextView_Date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="월요일"
+                        android:textColor="#FF000000"
+                        android:textSize="20dp"
+                        android:visibility="gone"/>
+
+                    <Spinner
+                        android:id="@+id/Spinner_WeekDay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>
 
                 <EditText
                     android:id="@+id/EditText_Name"
