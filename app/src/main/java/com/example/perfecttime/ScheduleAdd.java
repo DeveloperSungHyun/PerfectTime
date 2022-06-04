@@ -407,7 +407,7 @@ public class ScheduleAdd extends Activity {
                     break;
                 }
             }
-            finish();//===
+            finish();
         }else{
             Toast.makeText(getApplicationContext(),
                     "이름을 작성해주세요", Toast.LENGTH_SHORT).show();
