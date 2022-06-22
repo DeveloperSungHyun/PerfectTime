@@ -88,12 +88,15 @@ public class FragWeek extends Fragment {
                 AmPm = false;
             }
 
+            boolean sound = dayList.get(i).isSound();
+            boolean vibration = dayList.get(i).isVibration();
+            boolean popup = dayList.get(i).isPopup();
 
             if(i == 0 || dayList.get(i).getWeek() != dayList.get(i - 1).getWeek()){
-                ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, WeekDay[dayList.get(i).getWeek()] + "요일", 1);
+                ListItemDara dara = new ListItemDara(null ,Memo, Time_h, Time_m, AmPm, Important, sound, vibration, popup, WeekDay[dayList.get(i).getWeek()] + "요일", 1);
                 arrayList.add(dara);
             }
-            ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, WeekDay[dayList.get(i).getWeek()] + "요일", 0);
+            ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, sound, vibration, popup, WeekDay[dayList.get(i).getWeek()] + "요일", 0);
             arrayList.add(dara);
 
         }

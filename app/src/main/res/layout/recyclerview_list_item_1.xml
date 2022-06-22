@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/CardView_List"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -13,7 +14,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="10dp"
         card_view:cardCornerRadius="15dp"
-        card_view:cardElevation="5dp">
+        card_view:cardElevation="5dp"
+        >
 
         <RelativeLayout
             android:id="@+id/RelativeLayout_BackGround"
@@ -64,9 +66,37 @@
                     android:layout_marginTop="5dp"
                     android:text="text"
                     android:textColor="#1B1B1B"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"
+                    android:maxWidth="250dp"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="right"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:id="@+id/ImageView_sound"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/sound_on"/>
+
+                    <ImageView
+                        android:id="@+id/ImageView_vibration"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="5dp"
+                        android:src="@drawable/vibration"/>
+
+                    <ImageView
+                        android:id="@+id/ImageView_popup"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/popup"/>
+
+                </LinearLayout>
             </LinearLayout>
 
             <TextView
@@ -90,7 +120,9 @@
                 android:text="오후"
                 android:textColor="#808080"
                 android:textSize="15dp" />
+
         </RelativeLayout>
+
 
     </androidx.cardview.widget.CardView>
 

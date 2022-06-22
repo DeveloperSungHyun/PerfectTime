@@ -73,8 +73,11 @@ public class FragAll extends Fragment {
                 Time_h -= 12;
                 AmPm = false;
             }
+            boolean sound = dayList.get(i).isSound();
+            boolean vibration = dayList.get(i).isVibration();
+            boolean popup = dayList.get(i).isPopup();
 
-            ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, "매일", 0);
+            ListItemDara dara = new ListItemDara(Name ,Memo, Time_h, Time_m, AmPm, Important, sound, vibration, popup, "매일", 0);
             arrayList.add(dara);
 
         }

@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,7 +69,9 @@
                         android:textColor="#FF000000"
                         android:textSize="50dp" />
 
+
                 </LinearLayout>
+
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -135,7 +138,7 @@
                         android:id="@+id/TextView_Important"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="중요알림"
+                        android:text="중요알림 표시"
                         android:textColor="#000000"
                         android:textSize="18dp" />
 
@@ -264,13 +267,13 @@
                         android:id="@+id/TextView_popup_notification"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="꺼진화면 켜기"
+                        android:text="팝업창"
                         android:textColor="#FF000000"
                         android:textSize="18dp" />
 
 
                     <Switch
-                        android:id="@+id/Switch_notification"
+                        android:id="@+id/Switch_popup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true" />
@@ -287,42 +290,6 @@
                 android:orientation="vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
-
-
-                <!--                <RelativeLayout-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:orientation="horizontal"-->
-                <!--                    android:paddingLeft="5dp"-->
-                <!--                    android:paddingTop="15dp"-->
-                <!--                    android:paddingRight="5dp"-->
-                <!--                    android:paddingBottom="15dp">-->
-
-                <!--                    <TextView-->
-                <!--                        android:id="@+id/TextView_AutoOff"-->
-                <!--                        android:layout_width="wrap_content"-->
-                <!--                        android:layout_height="wrap_content"-->
-                <!--                        android:text="알림 자동제거"-->
-                <!--                        android:textColor="#FF000000"-->
-                <!--                        android:textSize="18dp" />-->
-
-                <!--                    <TextView-->
-                <!--                        android:layout_width="wrap_content"-->
-                <!--                        android:layout_height="wrap_content"-->
-                <!--                        android:layout_centerVertical="true"-->
-                <!--                        android:layout_marginLeft="20dp"-->
-                <!--                        android:layout_toRightOf="@+id/TextView_AutoOff"-->
-                <!--                        android:text="1분"-->
-                <!--                        android:textColor="#6363FF"-->
-                <!--                        android:textSize="15dp" />-->
-
-                <!--                </RelativeLayout>-->
-
-                <!--                <LinearLayout-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:background="#39000000"-->
-                <!--                    android:paddingTop="1dp" />-->
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -379,7 +346,7 @@
                         android:id="@+id/TextView_HolidayOff"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="공휴일 차단"
+                        android:text="자동 알림끄기"
                         android:textColor="#FF000000"
                         android:textSize="18dp" />
 
@@ -389,15 +356,9 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="20dp"
                         android:layout_toRightOf="@+id/TextView_HolidayOff"
-                        android:text="모든 공휴일"
+                        android:text="10초뒤 꺼짐"
                         android:textColor="#6363FF"
                         android:textSize="15dp" />
-
-                    <Switch
-                        android:id="@+id/Switch_HolidayOff"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true" />
 
                 </RelativeLayout>
             </LinearLayout>

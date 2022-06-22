@@ -164,7 +164,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.Memo.setText(listItemDara.get(position).getMemo());
         holder.Time.setText(Time_Str);
 
-        holder.TextView_Day.setText(listItemDara.get(position).getDay());
+        holder.TextView_Day.setText("");//listItemDara.get(position).getDay()
 
         if(listItemDara.get(position).isAmPm()) //true = 오전 | false = 오후
             holder.AmPm.setText("오전");
@@ -184,6 +184,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 //int i = MainActivity.viewPager.getCurrentItem();
                 int i = MainActivity.viewPager.getCurrentItem();
                 ItemPosition = holder.getAdapterPosition();
+
                 switch (i){
 
                     case 1:{
@@ -206,11 +207,10 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                         intent.putExtra("Sound", allDayDao.getAllDay().get(ItemPosition).isSound());
                         intent.putExtra("Vibration", allDayDao.getAllDay().get(ItemPosition).isVibration());
-                        intent.putExtra("Notification", allDayDao.getAllDay().get(ItemPosition).isNotification());
+                        intent.putExtra("popup", allDayDao.getAllDay().get(ItemPosition).isPopup());
 
-                        intent.putExtra("AutoOff_Time", allDayDao.getAllDay().get(ItemPosition).getAutoOff_Time());
+                        //intent.putExtra("AutoOff_Time", allDayDao.getAllDay().get(ItemPosition).getAutoOff_Time());
                         intent.putExtra("Warning", allDayDao.getAllDay().get(ItemPosition).isWarning());
-                        intent.putExtra("Holiday", allDayDao.getAllDay().get(ItemPosition).isHoliday());
 
                         break;
                     }
@@ -224,24 +224,59 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         intent = new Intent(view.getContext(), ScheduleAdd.class);
                         intent.putExtra("FragScene", "FragWeek_UpDate");
 
-                        int Week_count = WeekDay_count(ItemPosition);
-                        intent.putExtra("DateNumBer", WeekDayList.get(ItemPosition - Week_count).getId());
+                        int li_count = li_count_count(ItemPosition);
+                        intent.putExtra("DateNumBer", WeekDayList.get(ItemPosition - li_count).getId());
 
-                        intent.putExtra("Week", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getWeek());
+                        intent.putExtra("Week", weekDayDao.getWeekDay().get(ItemPosition - li_count).getWeek());
 
-                        intent.putExtra("Name", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getName());
-                        intent.putExtra("Memo", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getMemo());
-                        intent.putExtra("Time_h", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getTime_h());
-                        intent.putExtra("Time_m", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getTime_m());
-                        intent.putExtra("Important", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isImportant());
+                        intent.putExtra("Name", weekDayDao.getWeekDay().get(ItemPosition - li_count).getName());
+                        intent.putExtra("Memo", weekDayDao.getWeekDay().get(ItemPosition - li_count).getMemo());
+                        intent.putExtra("Time_h", weekDayDao.getWeekDay().get(ItemPosition - li_count).getTime_h());
+                        intent.putExtra("Time_m", weekDayDao.getWeekDay().get(ItemPosition - li_count).getTime_m());
 
-                        intent.putExtra("Sound", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isSound());
-                        intent.putExtra("Vibration", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isVibration());
-                        intent.putExtra("Notification", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isNotification());
 
-                        intent.putExtra("AutoOff_Time", weekDayDao.getWeekDay().get(ItemPosition - Week_count).getAutoOff_Time());
-                        intent.putExtra("Warning", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isWarning());
-                        intent.putExtra("Holiday", weekDayDao.getWeekDay().get(ItemPosition - Week_count).isHoliday());
+                        intent.putExtra("Important", weekDayDao.getWeekDay().get(ItemPosition - li_count).isImportant());
+
+                        intent.putExtra("Sound", weekDayDao.getWeekDay().get(ItemPosition - li_count).isSound());
+                        intent.putExtra("Vibration", weekDayDao.getWeekDay().get(ItemPosition - li_count).isVibration());
+                        intent.putExtra("popup", weekDayDao.getWeekDay().get(ItemPosition - li_count).isPopup());
+
+                        //intent.putExtra("AutoOff_Time", weekDayDao.getWeekDay().get(ItemPosition - li_count).getAutoOff_Time());
+                        intent.putExtra("Beforehand", weekDayDao.getWeekDay().get(ItemPosition - li_count).isWarning());
+                        break;
+                    }
+                    case 3:{
+
+                        dateDayList = dateDayDao.getDateDay();
+                        //Toast.makeText(view.getContext(), "test" + ItemPosition, Toast.LENGTH_SHORT).show();
+
+                        int li_count = li_count_count(ItemPosition);
+
+
+
+//                fragAll.TimeDateReSet(view.getContext());
+                        intent = new Intent(view.getContext(), ScheduleAdd.class);
+                        intent.putExtra("FragScene", "FragDate_UpDate");
+
+                        intent.putExtra("DateNumBer", dateDayList.get(ItemPosition - li_count).getId());
+
+                        intent.putExtra("Date_y", dateDayDao.getDateDay().get(ItemPosition - li_count).getDate_y());
+                        intent.putExtra("Date_m", dateDayDao.getDateDay().get(ItemPosition - li_count).getDate_m());
+                        intent.putExtra("Date_d", dateDayDao.getDateDay().get(ItemPosition - li_count).getDate_d());
+
+                        intent.putExtra("Name", dateDayDao.getDateDay().get(ItemPosition - li_count).getName());
+                        intent.putExtra("Memo", dateDayDao.getDateDay().get(ItemPosition - li_count).getMemo());
+                        intent.putExtra("Time_h", dateDayDao.getDateDay().get(ItemPosition - li_count).getTime_h());
+                        intent.putExtra("Time_m", dateDayDao.getDateDay().get(ItemPosition - li_count).getTime_m());
+                        intent.putExtra("Important", dateDayDao.getDateDay().get(ItemPosition - li_count).isImportant());
+
+                        intent.putExtra("Sound", dateDayDao.getDateDay().get(ItemPosition - li_count).isSound());
+                        intent.putExtra("Vibration", dateDayDao.getDateDay().get(ItemPosition - li_count).isVibration());
+                        intent.putExtra("popup", dateDayDao.getDateDay().get(ItemPosition - li_count).isPopup());
+
+                        //intent.putExtra("AutoOff_Time", dateDayDao.getDateDay().get(ItemPosition - li_count).getAutoOff_Time());
+                        intent.putExtra("Beforehand", dateDayDao.getDateDay().get(ItemPosition - li_count).isWarning());
+
                         break;
                     }
                 }
@@ -252,15 +287,29 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
 
+        holder.ImageView_sound.setVisibility(View.GONE);
+        holder.ImageView_vibration.setVisibility(View.GONE);
+        holder.ImageView_popup.setVisibility(View.GONE);
+
+        if(listItemDara.get(position).isSound()){
+            holder.ImageView_sound.setVisibility(View.VISIBLE);
+        }
+        if(listItemDara.get(position).isVibration()){
+            holder.ImageView_vibration.setVisibility(View.VISIBLE);
+        }
+        if(listItemDara.get(position).isPopup()){
+            holder.ImageView_popup.setVisibility(View.VISIBLE);
+        }
+
         holder.RelativeLayout_BackGround.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 ItemPosition = holder.getAdapterPosition();
 
-                int Week_count = WeekDay_count(ItemPosition);
-                Log.d("====================", Integer.toString(Week_count));
+                int li_count = li_count_count(ItemPosition);
+                Log.d("====================", Integer.toString(li_count));
 
-                remove(ItemPosition, Week_count);
+                remove(ItemPosition, li_count);
 
 
                 return true;
@@ -269,7 +318,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    int WeekDay_count(int ItemPosition){
+    int li_count_count(int ItemPosition){
         listItemDara.get(ItemPosition).getDay();
         //listItemDara.get(ItemPosition).getDay()
         int Week_count = 1;
@@ -348,7 +397,7 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 dateDayList = dateDayDao.getDateDay();
 
                                 DateDay dateDay = new DateDay();
-                                dateDay.setId(dateDayList.get(position).getId());
+                                dateDay.setId(dateDayList.get(position - Week_count).getId());
                                 //dateDay.setId(dateDayList.get(position).getId());
                                 dateDayDao.setDelete(dateDay);
                             }
@@ -380,6 +429,8 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView important;
         TextView TextView_Day;
 
+        ImageView ImageView_sound, ImageView_vibration, ImageView_popup;
+
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -391,6 +442,10 @@ public class ListDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             AmPm = itemView.findViewById(R.id.TextView_Time_AmPm);
             important = itemView.findViewById(R.id.ImageView_important);
             TextView_Day = itemView.findViewById(R.id.TextView_Day);
+
+            ImageView_sound = itemView.findViewById(R.id.ImageView_sound);
+            ImageView_vibration = itemView.findViewById(R.id.ImageView_vibration);
+            ImageView_popup = itemView.findViewById(R.id.ImageView_popup);
         }
     }
 

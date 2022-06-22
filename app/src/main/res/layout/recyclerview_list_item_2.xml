@@ -32,28 +32,43 @@
         android:layout_marginRight="2dp"
         android:layout_marginTop="15dp">
 
+
         <TextView
             android:id="@+id/TextView_Day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginBottom="2dp"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
+            android:paddingBottom="2dp"
             android:text="일"
             android:textColor="#000000"
-            android:textSize="17dp" />
+            android:textSize="17dp"
+            android:gravity="center"
+            android:background="@drawable/day_title_line"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:layout_marginLeft="3dp"
-            android:paddingTop="0.7dp"
-            android:background="#B6B6B6"
+            android:layout_marginLeft="0dp"
+            android:paddingTop="1dp"
+            android:background="#ECECEC"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/TextView_Day">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="0dp"
+            android:layout_marginLeft="5dp"
+            android:paddingTop="1dp"
+            android:background="#ECECEC"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/TextView_Day">
 
         </LinearLayout>
 

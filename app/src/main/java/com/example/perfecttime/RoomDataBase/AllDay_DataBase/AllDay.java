@@ -15,7 +15,16 @@ public class AllDay {
 
     private boolean Sound;
     private boolean Vibration;
-    private boolean Notification;
+
+    public boolean isPopup() {
+        return popup;
+    }
+
+    public void setPopup(boolean popup) {
+        this.popup = popup;
+    }
+
+    private boolean popup;
 
     private int AutoOff_Time;
     private boolean Warning;
@@ -83,14 +92,6 @@ public class AllDay {
 
     public void setVibration(boolean vibration) {
         Vibration = vibration;
-    }
-
-    public boolean isNotification() {
-        return Notification;
-    }
-
-    public void setNotification(boolean notification) {
-        Notification = notification;
     }
 
     public int getAutoOff_Time() {

@@ -11,16 +11,48 @@ public class ListItemDara {
 
     private int viewtype;
 
-    public ListItemDara(String name, String memo, int time_h, int time_m, boolean amPm, boolean important, String day, int viewtype) {
+    boolean sound, vibration, popup;
+
+    public boolean isSound() {
+        return sound;
+    }
+
+    public void setSound(boolean sound) {
+        this.sound = sound;
+    }
+
+    public boolean isVibration() {
+        return vibration;
+    }
+
+    public void setVibration(boolean vibration) {
+        this.vibration = vibration;
+    }
+
+    public boolean isPopup() {
+        return popup;
+    }
+
+    public void setPopup(boolean popup) {
+        this.popup = popup;
+    }
+
+    public ListItemDara(String name, String memo, int time_h, int time_m, boolean amPm, boolean important, boolean sound, boolean vibration, boolean popup, String day, int viewtype) {
         Name = name;
         Memo = memo;
         Time_h = time_h;
         Time_m = time_m;
         AmPm = amPm;
         this.important = important;
+
+        this.sound = sound;
+        this.vibration = vibration;
+        this.popup = popup;
+
         Day = day;
 
         this.viewtype = viewtype;
+
     }
 
     public int getViewtype() {

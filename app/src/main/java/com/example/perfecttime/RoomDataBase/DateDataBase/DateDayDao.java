@@ -19,6 +19,6 @@ public interface DateDayDao {
     @Delete
     void setDelete(DateDay dateDay);
 
-    @Query("SELECT * FROM DateDay ORDER BY Time_h, Time_m, Name")
+    @Query("SELECT * FROM DateDay ORDER BY Date_y, Date_m, Date_d, Time_h, Time_m, Name")
     List<DateDay> getDateDay();
 }

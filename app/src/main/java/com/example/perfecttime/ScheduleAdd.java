@@ -1,14 +1,15 @@
 package com.example.perfecttime;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -47,13 +48,12 @@ public class ScheduleAdd extends Activity {
     TextView TextView_Date;
     TextView TextView_Time_H, TextView_Time_M, TextView_AmPm;
     EditText EditText_Name, EditText_Memo;
-    Switch Switch_sound, Switch_vibration, Switch_notification;
-    Switch Switch_beforehand, Switch_HolidayOff, Switch_Important;
+    Switch Switch_sound, Switch_vibration, Switch_popup, Switch_beforehand, Switch_Important;
     Spinner Spinner_WeekDay;
 
     int Time_h, Time_m;
     String Name, Memo;
-    boolean sound, vibration, notification, beforehand, HolidayOff, Important;
+    boolean sound, vibration, popup, beforehand, Important;
 
     int Week = 0;
     int INT_Year, INT_Month, INT_Date;
@@ -69,15 +69,14 @@ public class ScheduleAdd extends Activity {
         EditText_Name = findViewById(R.id.EditText_Name);
         EditText_Memo = findViewById(R.id.EditText_Memo);
 
-        Switch_sound = findViewById(R.id.Switch_sound);
-        Switch_vibration = findViewById(R.id.Switch_vibration);
-        Switch_notification = findViewById(R.id.Switch_notification);
-        Switch_beforehand = findViewById(R.id.Switch_beforehand);
-        Switch_HolidayOff = findViewById(R.id.Switch_HolidayOff);
+        Switch_Important = findViewById(R.id.Switch_Important);//중요표시
 
-        Switch_Important = findViewById(R.id.Switch_Important);
+        Switch_sound = findViewById(R.id.Switch_sound);//소리
+        Switch_vibration = findViewById(R.id.Switch_vibration);//진동
+        Switch_popup = findViewById(R.id.Switch_popup);//팦업창
+        Switch_beforehand = findViewById(R.id.Switch_beforehand);//알림에고
 
-        Spinner_WeekDay = findViewById(R.id.Spinner_WeekDay);
+        Spinner_WeekDay = findViewById(R.id.Spinner_WeekDay);//요일 선택
     }
 
     @Override
@@ -134,6 +133,12 @@ public class ScheduleAdd extends Activity {
             }
         });
 
+        Switch_Important.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Important = b;
+            }
+        });
         Switch_sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -146,10 +151,10 @@ public class ScheduleAdd extends Activity {
                 vibration = b;
             }
         });
-        Switch_notification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        Switch_popup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                notification = b;
+                popup = b;
             }
         });
         Switch_beforehand.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -158,18 +163,7 @@ public class ScheduleAdd extends Activity {
                 beforehand = b;
             }
         });
-        Switch_HolidayOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                HolidayOff = b;
-            }
-        });
-        Switch_Important.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Important = b;
-            }
-        });
+
 
     }
 
@@ -177,10 +171,33 @@ public class ScheduleAdd extends Activity {
 
         String exit_SceneGetData = getIntentData.getStringExtra("FragScene");
         //날짜 타입의 알람
-        if(exit_SceneGetData.equals("FragDate")){
+        if(exit_SceneGetData.equals("FragDate_UpDate") ||
+                exit_SceneGetData.equals("FragDate")){
             INT_Year = getIntentData.getIntExtra("Date_y", 0);
             INT_Month = getIntentData.getIntExtra("Date_m", 0);
             INT_Date = getIntentData.getIntExtra("Date_d", 0);
+
+            TextView_Date.setVisibility(View.VISIBLE);
+            Spinner_WeekDay.setVisibility(View.GONE);
+            TextView_Date.setText(INT_Year + "년 " + INT_Month + "월 " + INT_Date + "일");
+
+            DatePickerDialog datePickerDialog;
+
+            datePickerDialog = new DatePickerDialog(ScheduleAdd.this, new DatePickerDialog.OnDateSetListener() {
+
+                @Override
+                public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                    INT_Year = i;
+                    INT_Month = i1 + 1;
+                    INT_Date = i2;
+
+                    TextView_Date.setText(INT_Year + "년 " + INT_Month + "월 " + INT_Date + "일");
+                }
+
+            }, INT_Year, INT_Month, INT_Date);
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
+            datePickerDialog.show();
         }
 
         if(exit_SceneGetData.equals("FragAll_UpDate") ||
@@ -214,6 +231,7 @@ public class ScheduleAdd extends Activity {
             });
         }
 
+
         if(  exit_SceneGetData.equals("FragAll") ||
                 exit_SceneGetData.equals("FragWeek") ||
                 exit_SceneGetData.equals("FragDate")){
@@ -242,13 +260,13 @@ public class ScheduleAdd extends Activity {
         Time_h = getIntentData.getIntExtra("Time_h", 0);
         Time_m = getIntentData.getIntExtra("Time_m", 0);
 
-        sound = getIntentData.getBooleanExtra("sound", false);
-        vibration = getIntentData.getBooleanExtra("vibration", false);
-        notification = getIntentData.getBooleanExtra("notification", false);
-
-        beforehand = getIntentData.getBooleanExtra("beforehand", false);
-        HolidayOff = getIntentData.getBooleanExtra("HolidayOff", false);
         Important = getIntentData.getBooleanExtra("Important", false);
+
+        sound = getIntentData.getBooleanExtra("Sound", false);
+        vibration = getIntentData.getBooleanExtra("Vibration", false);
+        popup = getIntentData.getBooleanExtra("popup", false);
+
+        beforehand = getIntentData.getBooleanExtra("Beforehand", false);
 
         EditText_Name.setText(Name);
         EditText_Memo.setText(Memo);
@@ -275,13 +293,12 @@ public class ScheduleAdd extends Activity {
 
         //    Switch Switch_sound, Switch_vibration, Switch_notification;
         //    Switch Switch_beforehand, Switch_HolidayOff, Switch_Important;
+        Switch_Important.setChecked(Important);
+
         Switch_sound.setChecked(sound);
         Switch_vibration.setChecked(vibration);
-        Switch_notification.setChecked(notification);
-
+        Switch_popup.setChecked(popup);
         Switch_beforehand.setChecked(beforehand);
-        Switch_HolidayOff.setChecked(HolidayOff);
-        Switch_Important.setChecked(Important);
     }
 
     void AllDate(String DateSet){
@@ -303,11 +320,10 @@ public class ScheduleAdd extends Activity {
 
         allDay.setSound(sound);
         allDay.setVibration(vibration);
-        allDay.setNotification(notification);
+        allDay.setPopup(popup);
 
         allDay.setAutoOff_Time(10);
         allDay.setWarning(beforehand);
-        allDay.setHoliday(HolidayOff);
 
         switch (DateSet){
             case "Insert":{
@@ -342,11 +358,10 @@ public class ScheduleAdd extends Activity {
 
         weekDay.setSound(sound);
         weekDay.setVibration(vibration);
-        weekDay.setNotification(notification);
+        weekDay.setPopup(popup);
 
         weekDay.setAutoOff_Time(10);
         weekDay.setWarning(beforehand);
-        weekDay.setHoliday(HolidayOff);
 
         //weekDayDao.setInsert(weekDay);
 
@@ -362,6 +377,48 @@ public class ScheduleAdd extends Activity {
         }
     }
 
+    void DateDate(String DateSet){
+
+        DateDayDataBase dateDayDataBase = Room.databaseBuilder(getApplicationContext(), DateDayDataBase.class, "DateDayData_DB")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build();
+
+        dateDayDao = dateDayDataBase.dateDayDao();
+
+        DateDay dateDay = new DateDay();
+
+        dateDay.setDate_y(INT_Year);
+        dateDay.setDate_m(INT_Month);
+        dateDay.setDate_d(INT_Date);
+
+        dateDay.setName(Name);
+        dateDay.setMemo(Memo);
+        dateDay.setTime_h(Time_h);
+        dateDay.setTime_m(Time_m);
+
+
+        dateDay.setImportant(Important);
+
+        dateDay.setSound(sound);
+        dateDay.setVibration(vibration);
+        dateDay.setPopup(popup);
+
+        dateDay.setAutoOff_Time(10);
+        dateDay.setWarning(beforehand);
+
+        switch (DateSet){
+            case "Insert":{
+                dateDayDao.setInsert(dateDay); break;
+            }
+            case "UpDate": {
+                //Log.d("==================UpDate", "OK");
+                dateDay.setId(UpDateNum);
+                dateDayDao.setUpDate(dateDay); break;
+            }
+        }
+    }
+
     public void SettingFinishButton(View view) {
         Name = EditText_Name.getText().toString();
         Memo = EditText_Memo.getText().toString();
@@ -371,6 +428,8 @@ public class ScheduleAdd extends Activity {
                 AllDate("UpDate");
             }else if(getIntentData.getStringExtra("FragScene").equals("FragWeek_UpDate")){
                 WeekDate("UpDate");
+            }else if(getIntentData.getStringExtra("FragScene").equals("FragDate_UpDate")){
+                DateDate("UpDate");
             }
 
             switch (getIntentData.getStringExtra("FragScene")) {
@@ -386,36 +445,7 @@ public class ScheduleAdd extends Activity {
                     break;
                 }
                 case "FragDate": {
-                    DateDayDataBase dateDayDataBase = Room.databaseBuilder(getApplicationContext(), DateDayDataBase.class, "DateDayData_DB")
-                            .fallbackToDestructiveMigration()
-                            .allowMainThreadQueries()
-                            .build();
-
-                    dateDayDao = dateDayDataBase.dateDayDao();
-
-                    DateDay dateDay = new DateDay();
-
-                    dateDay.setDate_y(INT_Year);
-                    dateDay.setDate_m(INT_Month);
-                    dateDay.setDate_d(INT_Date);
-
-                    dateDay.setName(Name);
-                    dateDay.setMemo(Memo);
-                    dateDay.setTime_h(Time_h);
-                    dateDay.setTime_m(Time_m);
-
-
-                    dateDay.setImportant(Important);
-
-                    dateDay.setSound(sound);
-                    dateDay.setVibration(vibration);
-                    dateDay.setNotification(notification);
-
-                    dateDay.setAutoOff_Time(10);
-                    dateDay.setWarning(beforehand);
-                    dateDay.setHoliday(HolidayOff);
-
-                    dateDayDao.setInsert(dateDay);
+                    DateDate("Insert");
 
                     break;
                 }
